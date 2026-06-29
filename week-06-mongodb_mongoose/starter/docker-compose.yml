@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: clinica-fertilidad-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: clinica
+      MONGO_INITDB_ROOT_PASSWORD: clinica123
+      MONGO_INITDB_DATABASE: fertilidad_dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
