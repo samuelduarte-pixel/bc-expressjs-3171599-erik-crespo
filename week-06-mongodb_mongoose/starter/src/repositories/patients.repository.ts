@@ -1,7 +1,8 @@
-import mongoose, { MongoServerError } from 'mongoose';
+import mongoose from 'mongoose';
+import { MongoServerError } from 'mongodb';
 import { Patient } from '../models/patient.model';
 import { AppError } from '../errors/AppError';
-import { CreatePatientDto, UpdatePatientDto } from '../schemas/patient.schema';
+import type { CreatePatientDto, UpdatePatientDto } from '../schemas/patient.schema';
 
 export async function findAll(page: number, limit: number) {
   const skip = (page - 1) * limit;
@@ -39,7 +40,7 @@ export async function create(data: CreatePatientDto) {
     });
     const populated = await patient.populate('assignedDoctor');
     return populated.toJSON();
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof MongoServerError && err.code === 11000) {
       throw new AppError(409, 'Ya existe un paciente con ese email');
     }
@@ -64,7 +65,7 @@ export async function update(id: string, data: UpdatePatientDto) {
       .lean();
     if (!patient) throw new AppError(404, 'Paciente no encontrado');
     return patient;
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof AppError) throw err;
     if (err instanceof mongoose.Error.CastError) {
       throw new AppError(400, 'ID invalido');

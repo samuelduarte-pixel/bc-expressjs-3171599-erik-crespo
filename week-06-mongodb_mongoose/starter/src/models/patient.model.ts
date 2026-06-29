@@ -1,5 +1,4 @@
-import { Schema, model } from 'mongoose';
-import type { IDoctor } from './doctor.model';
+import { Schema, model, Types } from 'mongoose';
 
 export interface IPatient {
   firstName: string;
@@ -9,7 +8,7 @@ export interface IPatient {
   dateOfBirth: Date;
   diagnosis: string;
   active: boolean;
-  assignedDoctor: IDoctor['_id'];
+  assignedDoctor: Types.ObjectId;
 }
 
 const patientSchema = new Schema<IPatient>(

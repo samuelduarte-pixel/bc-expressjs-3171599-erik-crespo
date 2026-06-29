@@ -15,7 +15,7 @@ export async function getAll(req: Request, res: Response, next: NextFunction): P
 
 export async function getById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const id = req.params['id'] ?? '';
+    const id = String(req.params['id']);
     const patient = await service.getPatient(id);
     res.json(patient);
   } catch (err) {
@@ -40,7 +40,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function update(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const id = req.params['id'] ?? '';
+    const id = String(req.params['id']);
     const parsed = updatePatientSchema.safeParse(req.body);
     if (!parsed.success) {
       const message = Object.values(parsed.error.flatten().fieldErrors)[0]?.[0] ?? 'Datos invalidos';
@@ -56,7 +56,7 @@ export async function update(req: Request, res: Response, next: NextFunction): P
 
 export async function remove(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const id = req.params['id'] ?? '';
+    const id = String(req.params['id']);
     await service.deletePatient(id);
     res.status(204).send();
   } catch (err) {
